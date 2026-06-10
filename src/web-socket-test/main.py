@@ -7,6 +7,8 @@ from collections import deque
 from typing import Any
 import json
 import os
+import pipeline
+import supabase_client
 
 app = FastAPI(title="Pier Drone Backend")
 
@@ -63,6 +65,17 @@ def root():
         "viewer": "/static/viewer.html",
         "vision_latest_frame": "/vision/latest-frame",
         "vision_latest_frame_meta": "/vision/latest-frame/meta",
+    }
+
+@app.get("/predict")
+def predict():
+    plates = pipeline.run_yolo()
+    for i, plate in enumerate(plates):
+        # Exemplo de upload, idealmente seria cada crop individual
+        supabase_client.upload_plate_image(plate, bucket="plates", filename=f"plate_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{i}.jpg")
+    return {
+        "message": "Rota de teste para rodar o pipeline de visão computacional",
+        "plates_detected": len(plates),
     }
 
 
