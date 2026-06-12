@@ -1,16 +1,12 @@
-import os
 import time
 import base64
 import json
 from pathlib import Path
 from datetime import datetime, timezone
-from dotenv import load_dotenv
 
 import websocket
 
-load_dotenv()
-
-WS_URL = os.getenv("WS_URL")
+WS_URL = "wss://pier-test-websocket.onrender.com/ws/frames"
 
 # Pasta que será monitorada no celular
 WATCH_DIR = Path.home() / "storage" / "shared" / "PierFrames"
